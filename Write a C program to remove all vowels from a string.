@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <string.h>
+
+void removeVowels(const char *str, char *result) {
+    int j = 0; // Index for the result string
+    for (int i = 0; str[i] != '\0'; i++) {
+        // Check if the character is a vowel (both lowercase and uppercase)
+        if (str[i] != 'a' && str[i] != 'e' && str[i] != 'i' && 
+            str[i] != 'o' && str[i] != 'u' && str[i] != 'A' && 
+            str[i] != 'E' && str[i] != 'I' && str[i] != 'O' && 
+            str[i] != 'U') {
+            result[j++] = str[i]; // Add non-vowel characters to result
+        }
+    }
+    result[j] = '\0'; // Null-terminate the result string
+}
+
+int main() {
+    char str[100], result[100];
+
+    // Input the string
+    printf("Enter a string: ");
+    fgets(str, sizeof(str), stdin);
+    // Remove the newline character from the end of the string
+    str[strcspn(str, "\n")] = 0;
+
+    // Remove vowels
+    removeVowels(str, result);
+
+    // Output the string without vowels
+    printf("String without vowels: %s\n", result);
+
+    return 0;
+}
