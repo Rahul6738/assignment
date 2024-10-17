@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+// Function to modify the value of an integer using a pointer
+void modifyValue(int *ptr) {
+    *ptr = *ptr + 10; // Increase the value by 10
+}
+
+// Function to print an array using pointers
+void printArray(int *arr, int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", *(arr + i)); // Access array elements using pointer arithmetic
+    }
+    printf("\n");
+}
+
+int main() {
+    int num = 5;
+    printf("Original value of num: %d\n", num);
+
+    // Modify the value of num using a pointer
+    modifyValue(&num); // Pass the address of num
+    printf("Modified value of num: %d\n", num);
+
+    // Demonstrating pointers with arrays
+    int arr[] = {1, 2, 3, 4, 5};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Array elements: ");
+    printArray(arr, size); // Print array using a pointer
+
+    return 0;
+}
