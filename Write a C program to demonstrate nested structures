@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+// Define a structure for storing Date information
+struct Date {
+    int day;
+    int month;
+    int year;
+};
+
+// Define a structure for storing Person information, which includes a Date structure
+struct Person {
+    char name[50];
+    int age;
+    struct Date birthdate; // Nested structure
+};
+
+// Function to display information about a person
+void displayPersonInfo(struct Person *p) {
+    printf("Name: %s\n", p->name);
+    printf("Age: %d\n", p->age);
+    printf("Birthdate: %02d/%02d/%d\n", p->birthdate.day, p->birthdate.month, p->birthdate.year);
+}
+
+int main() {
+    // Declare a variable of type Person
+    struct Person person;
+
+    // Input data for the person
+    printf("Enter the name of the person: ");
+    fgets(person.name, sizeof(person.name), stdin);  // Read name (including spaces)
+
+    printf("Enter the age of the person: ");
+    scanf("%d", &person.age);
+
+    printf("Enter the birthdate (day month year): ");
+    scanf("%d %d %d", &person.birthdate.day, &person.birthdate.month, &person.birthdate.year);
+
+    // Display the person's information
+    printf("\nPerson Information:\n");
+    displayPersonInfo(&person);
+
+    return 0;
+}
