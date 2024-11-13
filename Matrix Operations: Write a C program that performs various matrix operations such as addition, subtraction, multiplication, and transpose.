@@ -1,0 +1,141 @@
+#include <stdio.h>
+
+// Function prototypes
+void inputMatrix(int matrix[10][10], int rows, int cols);
+void printMatrix(int matrix[10][10], int rows, int cols);
+void addMatrices(int A[10][10], int B[10][10], int result[10][10], int rows, int cols);
+void subtractMatrices(int A[10][10], int B[10][10], int result[10][10], int rows, int cols);
+void multiplyMatrices(int A[10][10], int B[10][10], int result[10][10], int Arows, int Acols, int Bcols);
+void transposeMatrix(int matrix[10][10], int result[10][10], int rows, int cols);
+
+int main() {
+    int A[10][10], B[10][10], result[10][10];
+    int Arows, Acols, Brows, Bcols;
+    int choice;
+
+    // Input the size and elements of the first matrix
+    printf("Enter number of rows and columns for Matrix A: ");
+    scanf("%d %d", &Arows, &Acols);
+    printf("Enter elements of Matrix A:\n");
+    inputMatrix(A, Arows, Acols);
+
+    // Input the size and elements of the second matrix
+    printf("Enter number of rows and columns for Matrix B: ");
+    scanf("%d %d", &Brows, &Bcols);
+    printf("Enter elements of Matrix B:\n");
+    inputMatrix(B, Brows, Bcols);
+
+    // Main menu for selecting operations
+    while (1) {
+        printf("\nMatrix Operations Menu:\n");
+        printf("1. Matrix Addition\n");
+        printf("2. Matrix Subtraction\n");
+        printf("3. Matrix Multiplication\n");
+        printf("4. Matrix Transpose\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                if (Arows == Brows && Acols == Bcols) {
+                    addMatrices(A, B, result, Arows, Acols);
+                    printf("Matrix A + Matrix B:\n");
+                    printMatrix(result, Arows, Acols);
+                } else {
+                    printf("Matrix dimensions must match for addition!\n");
+                }
+                break;
+            case 2:
+                if (Arows == Brows && Acols == Bcols) {
+                    subtractMatrices(A, B, result, Arows, Acols);
+                    printf("Matrix A - Matrix B:\n");
+                    printMatrix(result, Arows, Acols);
+                } else {
+                    printf("Matrix dimensions must match for subtraction!\n");
+                }
+                break;
+            case 3:
+                if (Acols == Brows) {
+                    multiplyMatrices(A, B, result, Arows, Acols, Bcols);
+                    printf("Matrix A * Matrix B:\n");
+                    printMatrix(result, Arows, Bcols);
+                } else {
+                    printf("Number of columns in Matrix A must equal number of rows in Matrix B for multiplication!\n");
+                }
+                break;
+            case 4:
+                transposeMatrix(A, result, Arows, Acols);
+                printf("Transpose of Matrix A:\n");
+                printMatrix(result, Acols, Arows);
+                transposeMatrix(B, result, Brows, Bcols);
+                printf("Transpose of Matrix B:\n");
+                printMatrix(result, Bcols, Brows);
+                break;
+            case 5:
+                printf("Exiting the program.\n");
+                return 0;
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+}
+
+// Function to input matrix elements
+void inputMatrix(int matrix[10][10], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("Enter element at position (%d, %d): ", i + 1, j + 1);
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+}
+
+// Function to print a matrix
+void printMatrix(int matrix[10][10], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Function to add two matrices
+void addMatrices(int A[10][10], int B[10][10], int result[10][10], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            result[i][j] = A[i][j] + B[i][j];
+        }
+    }
+}
+
+// Function to subtract two matrices
+void subtractMatrices(int A[10][10], int B[10][10], int result[10][10], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            result[i][j] = A[i][j] - B[i][j];
+        }
+    }
+}
+
+// Function to multiply two matrices
+void multiplyMatrices(int A[10][10], int B[10][10], int result[10][10], int Arows, int Acols, int Bcols) {
+    for (int i = 0; i < Arows; i++) {
+        for (int j = 0; j < Bcols; j++) {
+            result[i][j] = 0;
+            for (int k = 0; k < Acols; k++) {
+                result[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+}
+
+// Function to find the transpose of a matrix
+void transposeMatrix(int matrix[10][10], int result[10][10], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            result[j][i] = matrix[i][j];
+        }
+    }
+}
