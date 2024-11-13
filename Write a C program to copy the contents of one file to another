@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+void copyFile(FILE *source, FILE *destination) {
+    char buffer[1024]; // Buffer to hold data temporarily
+    size_t bytesRead;
+
+    // Read the source file and write to the destination file
+    while ((bytesRead = fread(buffer, 1, sizeof(buffer), source)) > 0) {
+        fwrite(buffer, 1, bytesRead, destination);
+    }
+}
+
+int main() {
+    FILE *sourceFile, *destFile;
+    char sourceFileName[100], destFileName[100];
+
+    // Ask the user for the source and destination filenames
+    printf("Enter the source filename: ");
+    scanf("%s", sourceFileName);
+    printf("Enter the destination filename: ");
+    scanf("%s", destFileName);
+
+    // Open the source file in read mode
+    sourceFile = fopen(sourceFileName, "rb"); // Open for reading in binary mode
+    if (sourceFile == NULL) {
+        printf("Error: Could not open source file %s\n", sourceFileName);
+        return 1;
+    }
+
+    // Open the destination file in write mode
+    destFile = fopen(destFileName, "wb"); // Open for writing in binary mode
+    if (destFile == NULL) {
+        printf("Error: Could not open destination file %s\n", destFileName);
+        fclose(sourceFile);
+        return 1;
+    }
+
+    // Call the copy function to copy contents from source to destination
+    copyFile(sourceFile, destFile);
+
+    printf("File copy successful from %s to %s.\n", sourceFileName, destFileName);
+
+    // Close both files
+    fclose(sourceFile);
+    fclose(destFile);
+
+    return 0;
+}
