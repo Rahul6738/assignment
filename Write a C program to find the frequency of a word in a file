@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define MAX_LINE_LENGTH 1024
+
+// Function to count occurrences of a word in the file
+int countWordOccurrences(FILE *file, const char *word) {
+    char line[MAX_LINE_LENGTH];
+    int wordCount = 0;
+    size_t wordLen = strlen(word);
+
+    // Read each line of the file
+    while (fgets(line, sizeof(line), file)) {
+        char *ptr = line;
+
+        // Search for the word in the line
+        while ((ptr = strstr(ptr, word)) != NULL) {
+            wordCount++;
+            ptr += wordLen;  // Move pointer past the word to avoid counting it again
+        }
+    }
+
+    return wordCount;
+}
+
+int main() {
+    FILE *file;
+    char filename[100];
+    char word[100];
+
+    // Ask the user for the filename and the word to search for
+    printf("Enter the filename: ");
+    scanf("%s", filename);
+    printf("Enter the word to search for: ");
+    scanf("%s", word);
+
+    // Open the file in read mode
+    file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Error: Could not open file %s\n", filename);
+        return 1;
+    }
+
+    // Count occurrences of the word in the file
+    int frequency = countWordOccurrences(file, word);
+
+    // Output the result
+    printf("The word '%s' appears %d time(s) in the file '%s'.\n", word, frequency, filename);
+
+    // Close the file
+    fclose(file);
+
+    return 0;
+}
