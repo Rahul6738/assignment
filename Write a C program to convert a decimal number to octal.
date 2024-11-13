@@ -1,0 +1,40 @@
+#include <stdio.h>
+
+void decimalToOctal(int n) {
+    // Array to store octal number
+    int octal[32];  // Assuming a 32-bit integer
+    int i = 0;
+
+    // Handle the case when n is 0
+    if (n == 0) {
+        printf("Octal representation: 0\n");
+        return;
+    }
+
+    // Fill the octal array with the octal representation of n
+    while (n > 0) {
+        octal[i] = n % 8;  // Get the remainder (0-7)
+        n = n / 8;  // Divide the number by 8
+        i++;
+    }
+
+    // Print the octal number in reverse order (since we stored it from least significant digit to most)
+    printf("Octal representation: ");
+    for (int j = i - 1; j >= 0; j--) {
+        printf("%d", octal[j]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int n;
+
+    // Ask the user for a decimal number
+    printf("Enter a decimal number: ");
+    scanf("%d", &n);
+
+    // Call the function to convert the decimal number to octal
+    decimalToOctal(n);
+
+    return 0;
+}
