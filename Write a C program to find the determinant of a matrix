@@ -1,0 +1,78 @@
+#include <stdio.h>
+
+#define MAX 10  // Maximum size of the matrix
+
+// Function to calculate the determinant of a matrix using recursion
+int determinant(int matrix[MAX][MAX], int n) {
+    int det = 0;
+    
+    // Base case: If the matrix is 1x1, the determinant is the value of the single element
+    if (n == 1) {
+        return matrix[0][0];
+    }
+
+    // Base case: If the matrix is 2x2, the determinant is ad - bc for a matrix [a, b; c, d]
+    if (n == 2) {
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+    }
+
+    // Recursive case: For larger matrices, calculate the determinant using cofactor expansion
+    for (int i = 0; i < n; i++) {
+        int subMatrix[MAX][MAX];
+        int subRow = 0;
+        
+        // Create the submatrix by excluding the current row (i) and column (0)
+        for (int j = 1; j < n; j++) {
+            int subCol = 0;
+            for (int k = 0; k < n; k++) {
+                if (k == i) {
+                    continue;  // Skip the column to be excluded
+                }
+                subMatrix[subRow][subCol] = matrix[j][k];
+                subCol++;
+            }
+            subRow++;
+        }
+        
+        // Apply cofactor expansion (alternating signs)
+        det += (i % 2 == 0 ? 1 : -1) * matrix[0][i] * determinant(subMatrix, n - 1);
+    }
+    
+    return det;
+}
+
+// Function to read a matrix from the user
+void readMatrix(int matrix[MAX][MAX], int n) {
+    printf("Enter the elements of the matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+}
+
+int main() {
+    int n;
+    int matrix[MAX][MAX];
+
+    // Ask the user for the size of the matrix (n x n)
+    printf("Enter the size of the matrix (n x n): ");
+    scanf("%d", &n);
+
+    // Ensure that the matrix size is valid
+    if (n <= 0 || n > MAX) {
+        printf("Invalid size! Please enter a value between 1 and %d.\n", MAX);
+        return 1;
+    }
+
+    // Read the matrix from the user
+    readMatrix(matrix, n);
+
+    // Calculate the determinant
+    int det = determinant(matrix, n);
+
+    // Print the determinant
+    printf("The determinant of the matrix is: %d\n", det);
+
+    return 0;
+}
