@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+// Define a structure
+struct MyStruct {
+    int a;        // 4 bytes (on most systems)
+    double b;     // 8 bytes (on most systems)
+    char c;       // 1 byte
+};
+
+int main() {
+    // Print the size of the structure
+    printf("Size of the structure: %lu bytes\n", sizeof(struct MyStruct));
+
+    // You can also print the size of individual members
+    printf("Size of 'a' (int): %lu bytes\n", sizeof(((struct MyStruct *)0)->a));
+    printf("Size of 'b' (double): %lu bytes\n", sizeof(((struct MyStruct *)0)->b));
+    printf("Size of 'c' (char): %lu bytes\n", sizeof(((struct MyStruct *)0)->c));
+
+    return 0;
+}
