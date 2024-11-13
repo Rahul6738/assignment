@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+void decimalToHexadecimal(int n) {
+    // Array to store hexadecimal digits
+    char hex[32];  // Assuming a 32-bit integer
+    int i = 0;
+    
+    // Handle the case when n is 0
+    if (n == 0) {
+        printf("Hexadecimal representation: 0\n");
+        return;
+    }
+
+    // Fill the hex array with the hexadecimal representation of n
+    while (n > 0) {
+        int remainder = n % 16;
+        
+        // Convert the remainder to the correct hexadecimal character
+        if (remainder < 10) {
+            hex[i] = remainder + '0';  // '0' to '9'
+        } else {
+            hex[i] = remainder - 10 + 'A';  // 'A' to 'F'
+        }
+        
+        n = n / 16;  // Divide the number by 16
+        i++;
+    }
+
+    // Print the hexadecimal number in reverse order
+    printf("Hexadecimal representation: ");
+    for (int j = i - 1; j >= 0; j--) {
+        printf("%c", hex[j]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int n;
+
+    // Ask the user for a decimal number
+    printf("Enter a decimal number: ");
+    scanf("%d", &n);
+
+    // Call the function to convert the decimal number to hexadecimal
+    decimalToHexadecimal(n);
+
+    return 0;
+}
