@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int main() {
+    int num = 10;             // Regular integer variable
+    int *ptr;                 // Pointer to an integer
+    
+    ptr = &num;               // Assign the address of 'num' to the pointer 'ptr'
+    
+    // Printing the value of 'num' using the pointer
+    printf("Value of num: %d\n", num);
+    
+    // Dereferencing the pointer to get the value stored at the address 'ptr' is pointing to
+    printf("Value of num using pointer: %d\n", *ptr);
+    
+    // Printing the address of 'num' using the pointer
+    printf("Address of num: %p\n", (void*)&num);
+    
+    // Printing the value of 'num' using the pointer's address
+    printf("Address stored in pointer ptr: %p\n", (void*)ptr);
+    
+    // Using pointer arithmetic (incrementing the pointer)
+    printf("Pointer address before incrementing: %p\n", (void*)ptr);
+    ptr++;  // Move to the next integer location (pointer arithmetic)
+    printf("Pointer address after incrementing: %p\n", (void*)ptr);
+
+    return 0;
+}
