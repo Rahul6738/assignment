@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 10  // Maximum size of the matrix
+
+// Function to find the determinant of a matrix
+int determinant(int matrix[MAX][MAX], int n) {
+    int det = 0;
+    
+    // Base case: If the matrix is 1x1
+    if (n == 1) {
+        return matrix[0][0];
+    }
+
+    // Base case: If the matrix is 2x2
+    if (n == 2) {
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+    }
+
+    // Recursive case for larger matrices
+    for (int i = 0; i < n; i++) {
+        int subMatrix[MAX][MAX];
+        int subRow = 0;
+        
+        // Create the submatrix by excluding the current row (i) and column (0)
+        for (int j = 1; j < n; j++) {
+            int subCol = 0;
+            for (int k = 0; k < n; k++) {
+                if (k == i) {
+                    continue;  // Skip the column to be excluded
+                }
+                subMatrix[subRow][subCol] = matrix[j][k];
+                subCol++;
+            }
+            subRow++;
+        }
+
+        // Apply cofactor expansion (alternating signs)
+        det += (i % 2 == 0 ? 1 : -1) * matrix[0][i] * determinant(subMatrix, n - 1);
+    }
+
+    return det;
+}
+
+// Function to find the adjoint of a matrix
+void adjoint(int matrix[MAX][MAX], int adj[MAX][MAX], int n) {
+    if (n == 1) {
+        adj[0][0] = 1;
+        return;
+    }
+
+    int subMatrix[MAX][MAX];
+    int sign = 1;
+
+    // Calculate cofactor for each element and store in adj
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            // Get the submatrix by excluding the i-th row and j-th column
+            int subRow = 0;
+            for (int x = 0; x < n; x++) {
+                if (x == i) continue;
+                int subCol = 0;
+                for (int y = 0; y < n; y++) {
+                    if (y == j) continue;
+                    subMatrix[subRow][subCol] = matrix[x][y];
+                    subCol++;
+                }
+                subRow++;
+            }
+            // Find the cofactor and store in adj[i][j]
+            sign = ((i + j) % 2 == 0) ? 1 : -1;
+            adj[j][i] = sign * determinant(subMatrix, n - 1);  // Transpose during adjoint computation
+        }
+    }
+}
+
+// Function to multiply a matrix by a scalar
+void multiplyByScalar(int matrix[MAX][MAX], int result[MAX][MAX], int scalar, int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            result[i][j] = matrix[i][j] * scalar;
+        }
+    }
+}
+
+// Function to find the inverse of a matrix
+int inverse(int matrix[MAX][MAX], float inverse[MAX][MAX], int n) {
+    int det = determinant(matrix, n);
+    if (det == 0) {
+        printf("Matrix is singular and cannot be inverted.\n");
+        return 0;
+    }
+
+    int adj[MAX][MAX];
+    adjoint(matrix, adj, n);
+
+    // Multiply adjoint by 1/det to get the inverse
+    multiplyByScalar(adj, inverse, 1.0 / det, n);
+    
+    return 1;
+}
+
+// Function to print a matrix
+void printMatrix(float matrix[MAX][MAX], int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%f ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int n;
+    int matrix[MAX][MAX];
+    float inverseMatrix[MAX][MAX];
+
+    // Ask user for the size of the matrix (n x n)
+    printf("Enter the size of the matrix (n x n): ");
+    scanf("%d", &n);
+
+    // Ensure that the matrix size is valid
+    if (n <= 0 || n > MAX) {
+        printf("Invalid size! Please enter a value between 1 and %d.\n", MAX);
+        return 1;
+    }
+
+    // Read the matrix from the user
+    printf("Enter the elements of the matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &matrix[i][j]);
+        }
+    }
+
+    // Calculate the inverse
+    if (inverse(matrix, inverseMatrix, n)) {
+        printf("The inverse of the matrix is:\n");
+        printMatrix(inverseMatrix, n);
+    }
+
+    return 0;
+}
