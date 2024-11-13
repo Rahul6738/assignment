@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure to represent a room
+struct Room {
+    char name[50];
+    char description[200];
+    struct Room *north;
+    struct Room *south;
+    struct Room *east;
+    struct Room *west;
+    void (*challenge)(void); // Pointer to a function for room-specific challenges
+};
+
+// Function prototypes
+void startChallenge(void);
+void answerRiddle(void);
+void defeatMonster(void);
+void describeRoom(struct Room *room);
+void move(struct Room **currentRoom, struct Room *newRoom);
+
+int main() {
+    // Creating the rooms of the game
+    struct Room room1 = {"Entrance Hall", "You are in a grand entrance hall. There's a door to the north.", NULL, NULL, NULL, NULL, startChallenge};
+    struct Room room2 = {"Library", "A dusty old library filled with ancient books. There's a door to the south.", NULL, NULL, NULL, NULL, answerRiddle};
+    struct Room room3 = {"Dungeon", "A dark, damp dungeon. You feel a presence nearby. There's a door to the east.", NULL, NULL, NULL, NULL, defeatMonster};
+    struct Room room4 = {"Treasure Room", "You found the treasure room! There's a door to the west.", NULL, NULL, NULL, NULL, NULL};
+
+    // Linking rooms
+    room1.north = &room2;
+    room2.south = &room1;
+    room2.east = &room3;
+    room3.west = &room2;
+    room3.east = &room4;
+    room4.west = &room3;
+
+    struct Room *currentRoom = &room1;
+    char direction[10];
+    int gameRunning = 1;
+
+    printf("Welcome to the Text-based Adventure Game!\n");
+
+    while (gameRunning) {
+        describeRoom(currentRoom);
+        
+        printf("What do you want to do? (Type 'north', 'south', 'east', 'west' to move, or 'quit' to quit): ");
+        scanf("%s", direction);
+
+        if (strcmp(direction, "quit") == 0) {
+            printf("Thanks for playing! Goodbye.\n");
+            gameRunning = 0;
+        } else if (strcmp(direction, "north") == 0 && currentRoom->north != NULL) {
+            move(&currentRoom, currentRoom->north);
+        } else if (strcmp(direction, "south") == 0 && currentRoom->south != NULL) {
+            move(&currentRoom, currentRoom->south);
+        } else if (strcmp(direction, "east") == 0 && currentRoom->east != NULL) {
+            move(&currentRoom, currentRoom->east);
+        } else if (strcmp(direction, "west") == 0 && currentRoom->west != NULL) {
+            move(&currentRoom, currentRoom->west);
+        } else {
+            printf("You can't go that way!\n");
+        }
+
+        // Trigger challenge when entering new room
+        if (currentRoom->challenge != NULL) {
+            currentRoom->challenge();
+        }
+    }
+
+    return 0;
+}
+
+// Function to describe the room the player is in
+void describeRoom(struct Room *room) {
+    printf("\nYou are in the %s.\n", room->name);
+    printf("%s\n", room->description);
+}
+
+// Function to handle moving between rooms
+void move(struct Room **currentRoom, struct Room *newRoom) {
+    *currentRoom = newRoom;
+    printf("You move to the %s.\n", newRoom->name);
+}
+
+// Challenge 1: The Riddle
+void answerRiddle(void) {
+    char answer[50];
+    printf("A voice says: 'I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?'\n");
+    printf("Your answer: ");
+    scanf("%s", answer);
+
+    if (strcmp(answer, "echo") == 0) {
+        printf("Correct! You may proceed.\n");
+    } else {
+        printf("Wrong answer! You cannot proceed until you solve the riddle.\n");
+    }
+}
+
+// Challenge 2: Defeat the Monster
+void defeatMonster(void) {
+    char choice[10];
+    printf("A monster appears in front of you! It roars and blocks your path.\n");
+    printf("Do you fight or flee? (Type 'fight' to fight or 'flee' to run): ");
+    scanf("%s", choice);
+
+    if (strcmp(choice, "fight") == 0) {
+        printf("You bravely fight the monster and defeat it!\n");
+    } else {
+        printf("You flee the dungeon and return to the previous room.\n");
+    }
+}
+
+// Challenge 3: Start of the Game (No challenge)
+void startChallenge(void) {
+    printf("You look around the entrance hall and see doors leading to other rooms. No challenges yet!\n");
+}
