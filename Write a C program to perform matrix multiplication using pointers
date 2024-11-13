@@ -1,0 +1,75 @@
+#include <stdio.h>
+
+#define MAX 3  // Define the size of the matrix (3x3 for simplicity)
+
+// Function to perform matrix multiplication using pointers
+void multiplyMatrices(int *A, int *B, int *result, int rowsA, int colsA, int rowsB, int colsB) {
+    // Check if matrix multiplication is possible (colsA == rowsB)
+    if (colsA != rowsB) {
+        printf("Matrix multiplication is not possible due to incompatible dimensions.\n");
+        return;
+    }
+
+    // Initialize result matrix to 0
+    for (int i = 0; i < rowsA; i++) {
+        for (int j = 0; j < colsB; j++) {
+            *(result + i * colsB + j) = 0;  // Initialize result[i][j] to 0
+        }
+    }
+
+    // Perform matrix multiplication
+    for (int i = 0; i < rowsA; i++) {
+        for (int j = 0; j < colsB; j++) {
+            for (int k = 0; k < colsA; k++) {
+                *(result + i * colsB + j) += *(A + i * colsA + k) * *(B + k * colsB + j);
+            }
+        }
+    }
+}
+
+// Function to print a matrix
+void printMatrix(int *matrix, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", *(matrix + i * cols + j));
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int A[MAX][MAX], B[MAX][MAX], result[MAX][MAX];
+    
+    // Input elements for matrix A
+    printf("Enter elements of matrix A (3x3):\n");
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            printf("A[%d][%d]: ", i, j);
+            scanf("%d", &A[i][j]);
+        }
+    }
+
+    // Input elements for matrix B
+    printf("Enter elements of matrix B (3x3):\n");
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            printf("B[%d][%d]: ", i, j);
+            scanf("%d", &B[i][j]);
+        }
+    }
+
+    // Perform matrix multiplication
+    multiplyMatrices((int *)A, (int *)B, (int *)result, MAX, MAX, MAX, MAX);
+
+    // Output the matrices and their product
+    printf("\nMatrix A:\n");
+    printMatrix((int *)A, MAX, MAX);
+
+    printf("\nMatrix B:\n");
+    printMatrix((int *)B, MAX, MAX);
+
+    printf("\nResulting Matrix (A * B):\n");
+    printMatrix((int *)result, MAX, MAX);
+
+    return 0;
+}
