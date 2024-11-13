@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Define the structure
+struct Student {
+    char name[50];
+    int age;
+    float marks;
+};
+
+// Comparison function for sorting by marks
+int compareByMarks(const void *a, const void *b) {
+    // Cast the void pointers to `Student` pointers
+    struct Student *studentA = (struct Student *)a;
+    struct Student *studentB = (struct Student *)b;
+    
+    // Compare the marks of the two students
+    if (studentA->marks < studentB->marks) {
+        return -1; // studentA has lower marks
+    } else if (studentA->marks > studentB->marks) {
+        return 1;  // studentA has higher marks
+    } else {
+        return 0;  // marks are equal
+    }
+}
+
+// Function to display the student details
+void displayStudents(struct Student students[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("Name: %-20s Age: %-5d Marks: %.2f\n", students[i].name, students[i].age, students[i].marks);
+    }
+}
+
+int main() {
+    // Array of students
+    struct Student students[] = {
+        {"Alice", 20, 88.5},
+        {"Bob", 22, 95.0},
+        {"Charlie", 21, 72.0},
+        {"David", 23, 84.5},
+        {"Eva", 22, 91.0}
+    };
+
+    int n = sizeof(students) / sizeof(students[0]); // Number of students
+
+    // Display students before sorting
+    printf("Students before sorting:\n");
+    displayStudents(students, n);
+
+    // Sort the array of students by marks using qsort
+    qsort(students, n, sizeof(struct Student), compareByMarks);
+
+    // Display students after sorting
+    printf("\nStudents after sorting by marks:\n");
+    displayStudents(students, n);
+
+    return 0;
+}
