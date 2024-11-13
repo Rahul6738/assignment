@@ -1,0 +1,101 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N 5 // Define the size of the maze (5x5 in this case)
+
+// Maze configuration
+int maze[N][N] = {
+    {1, 0, 0, 0, 0},
+    {1, 1, 1, 1, 0},
+    {0, 0, 0, 1, 0},
+    {1, 1, 1, 0, 1},
+    {1, 0, 1, 1, 1}
+};
+
+// Directions for movement (up, right, down, left)
+int rowDirs[] = {-1, 0, 1, 0};
+int colDirs[] = {0, 1, 0, -1};
+
+// Stack structure for DFS
+typedef struct {
+    int x, y;
+} Position;
+
+Position stack[N * N];  // Maximum size of stack
+int top = -1;  // Stack pointer
+
+// Function to check if a position is within bounds and open (path = 1)
+int isValid(int x, int y) {
+    return (x >= 0 && x < N && y >= 0 && y < N && maze[x][y] == 1);
+}
+
+// Push position to the stack
+void push(Position pos) {
+    if (top < N * N - 1) {
+        top++;
+        stack[top] = pos;
+    }
+}
+
+// Pop position from the stack
+Position pop() {
+    if (top >= 0) {
+        return stack[top--];
+    }
+    Position nullPos = {-1, -1};
+    return nullPos;
+}
+
+// DFS to solve the maze
+int solveMaze(Position start, Position end) {
+    // Mark start as visited
+    maze[start.x][start.y] = -1;
+
+    // Push start position to stack
+    push(start);
+
+    // While stack is not empty
+    while (top >= 0) {
+        Position current = pop();
+
+        // If we reached the end
+        if (current.x == end.x && current.y == end.y) {
+            printf("Path to exit: \n");
+            while (top >= 0) {
+                printf("(%d, %d) -> ", stack[top].x, stack[top].y);
+                pop();
+            }
+            printf("(%d, %d)\n", current.x, current.y);  // Print the last position (end)
+            return 1;
+        }
+
+        // Explore the four directions (up, right, down, left)
+        for (int i = 0; i < 4; i++) {
+            int newX = current.x + rowDirs[i];
+            int newY = current.y + colDirs[i];
+
+            // Check if the new position is valid
+            if (isValid(newX, newY)) {
+                // Mark as visited (we use -1 to mark visited positions)
+                maze[newX][newY] = -1;
+                Position nextPos = {newX, newY};
+                push(nextPos);
+            }
+        }
+    }
+
+    printf("No path to the exit.\n");
+    return 0;
+}
+
+int main() {
+    Position start = {0, 0};  // Starting position (top-left corner)
+    Position end = {4, 4};    // Exit position (bottom-right corner)
+
+    // Solve the maze and print the path
+    if (!solveMaze(start, end)) {
+        printf("No solution found.\n");
+    }
+
+    return 0;
+}
