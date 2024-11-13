@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+// Define a union named 'Data'
+union Data {
+    int i;        // Integer type
+    float f;      // Float type
+    char str[20]; // String (character array)
+};
+
+int main() {
+    // Declare a variable of type 'union Data'
+    union Data data;
+
+    // Store an integer in the union
+    data.i = 10;
+    printf("Data as Integer: %d\n", data.i);
+
+    // Store a float in the same union variable (overwrites the previous value)
+    data.f = 3.14;
+    printf("Data as Float: %.2f\n", data.f);
+
+    // Store a string in the same union variable (overwrites the previous value)
+    snprintf(data.str, sizeof(data.str), "Hello, Union!");
+    printf("Data as String: %s\n", data.str);
+
+    // Showing the final values in the union, only the last stored value is valid
+    printf("\nAfter storing all values:\n");
+    printf("Data as Integer: %d\n", data.i);  // May show garbage value
+    printf("Data as Float: %.2f\n", data.f);  // May show garbage value
+    printf("Data as String: %s\n", data.str); // Displays "Hello, Union!"
+
+    return 0;
+}
