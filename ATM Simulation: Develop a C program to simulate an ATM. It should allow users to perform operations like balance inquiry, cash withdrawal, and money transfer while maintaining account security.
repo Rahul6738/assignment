@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_ATTEMPTS 3
+
+// Structure to represent an ATM account
+struct Account {
+    int accountNumber;
+    char pin[5];  // 4-digit PIN as string (e.g., "1234")
+    float balance;
+};
+
+// Function prototypes
+int login(struct Account *account);
+void balanceInquiry(struct Account *account);
+void cashWithdrawal(struct Account *account);
+void moneyTransfer(struct Account *account, struct Account *otherAccount);
+
+int main() {
+    struct Account account1 = {1001, "1234", 5000.0};  // Sample account 1
+    struct Account account2 = {1002, "5678", 3000.0};  // Sample account 2
+
+    int option;
+    int loggedIn = 0;
+
+    // Login process
+    loggedIn = login(&account1);
+
+    if (loggedIn) {
+        while (1) {
+            printf("\nATM Menu:\n");
+            printf("1. Balance Inquiry\n");
+            printf("2. Cash Withdrawal\n");
+            printf("3. Money Transfer\n");
+            printf("4. Exit\n");
+            printf("Choose an option: ");
+            scanf("%d", &option);
+
+            switch (option) {
+                case 1:
+                    balanceInquiry(&account1);
+                    break;
+                case 2:
+                    cashWithdrawal(&account1);
+                    break;
+                case 3:
+                    moneyTransfer(&account1, &account2);
+                    break;
+                case 4:
+                    printf("Thank you for using the ATM. Goodbye!\n");
+                    return 0;
+                default:
+                    printf("Invalid option! Please try again.\n");
+                    break;
+            }
+        }
+    } else {
+        printf("Login failed! Exiting program.\n");
+    }
+
+    return 0;
+}
+
+// Function to simulate login and PIN verification
+int login(struct Account *account) {
+    char enteredPin[5];
+    int attempts = 0;
+
+    while (attempts < MAX_ATTEMPTS) {
+        printf("Enter your PIN: ");
+        scanf("%s", enteredPin);
+
+        if (strcmp(account->pin, enteredPin) == 0) {
+            printf("Login successful!\n");
+            return 1;  // Login success
+        } else {
+            attempts++;
+            printf("Incorrect PIN. You have %d attempt(s) left.\n", MAX_ATTEMPTS - attempts);
+        }
+    }
+
+    printf("Too many incorrect attempts. Exiting ATM.\n");
+    return 0;  // Login failed
+}
+
+// Function to display account balance
+void balanceInquiry(struct Account *account) {
+    printf("Your current balance is: $%.2f\n", account->balance);
+}
+
+// Function to allow cash withdrawal
+void cashWithdrawal(struct Account *account) {
+    float amount;
+    printf("Enter the amount to withdraw: $");
+    scanf("%f", &amount);
+
+    if (amount <= 0) {
+        printf("Invalid amount! Withdrawal must be greater than zero.\n");
+    } else if (amount > account->balance) {
+        printf("Insufficient funds! Your current balance is $%.2f.\n", account->balance);
+    } else {
+        account->balance -= amount;
+        printf("You have withdrawn $%.2f. Your new balance is $%.2f.\n", amount, account->balance);
+    }
+}
+
+// Function to simulate money transfer between two accounts
+void moneyTransfer(struct Account *account, struct Account *otherAccount) {
+    float amount;
+    int accountNumber;
+    
+    printf("Enter the account number to transfer to: ");
+    scanf("%d", &accountNumber);
+
+    if (accountNumber != otherAccount->accountNumber) {
+        printf("Invalid account number! Transfer failed.\n");
+        return;
+    }
+
+    printf("Enter the amount to transfer: $");
+    scanf("%f", &amount);
+
+    if (amount <= 0) {
+        printf("Invalid amount! Transfer amount must be greater than zero.\n");
+    } else if (amount > account->balance) {
+        printf("Insufficient funds! Your current balance is $%.2f.\n", account->balance);
+    } else {
+        account->balance -= amount;
+        otherAccount->balance += amount;
+        printf("You have transferred $%.2f to account %d.\n", amount, accountNumber);
+        printf("Your new balance is $%.2f.\n", account->balance);
+        printf("Account %d's new balance is $%.2f.\n", otherAccount->accountNumber, otherAccount->balance);
+    }
+}
