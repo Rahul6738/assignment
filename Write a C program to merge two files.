@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void mergeFiles(FILE *file1, FILE *file2, FILE *outputFile) {
+    char ch;
+
+    // Copy contents from the first file to the output file
+    while ((ch = fgetc(file1)) != EOF) {
+        fputc(ch, outputFile);
+    }
+
+    // Copy contents from the second file to the output file
+    while ((ch = fgetc(file2)) != EOF) {
+        fputc(ch, outputFile);
+    }
+}
+
+int main() {
+    FILE *file1, *file2, *outputFile;
+    char file1Name[100], file2Name[100], outputFileName[100];
+
+    // Ask the user for the filenames
+    printf("Enter the first filename: ");
+    scanf("%s", file1Name);
+    printf("Enter the second filename: ");
+    scanf("%s", file2Name);
+    printf("Enter the output filename: ");
+    scanf("%s", outputFileName);
+
+    // Open the first file in read mode
+    file1 = fopen(file1Name, "rb");
+    if (file1 == NULL) {
+        printf("Error: Could not open file %s\n", file1Name);
+        return 1;
+    }
+
+    // Open the second file in read mode
+    file2 = fopen(file2Name, "rb");
+    if (file2 == NULL) {
+        printf("Error: Could not open file %s\n", file2Name);
+        fclose(file1);
+        return 1;
+    }
+
+    // Open the output file in write mode
+    outputFile = fopen(outputFileName, "wb");
+    if (outputFile == NULL) {
+        printf("Error: Could not open file %s for writing\n", outputFileName);
+        fclose(file1);
+        fclose(file2);
+        return 1;
+    }
+
+    // Merge the two files into the output file
+    mergeFiles(file1, file2, outputFile);
+
+    printf("Files successfully merged into %s\n", outputFileName);
+
+    // Close all files
+    fclose(file1);
+    fclose(file2);
+    fclose(outputFile);
+
+    return 0;
+}
