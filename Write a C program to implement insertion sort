@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+// Function to perform insertion sort
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];  // The element to be inserted into the sorted portion of the array
+        int j = i - 1;
+        
+        // Shift elements of arr[0..i-1] that are greater than the key to one position ahead of their current position
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+
+        // Place the key after the last shifted element
+        arr[j + 1] = key;
+    }
+}
+
+// Function to print the array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int n;
+
+    // Ask the user for the size of the array
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
+
+    int arr[n];
+
+    // Ask the user to input the elements of the array
+    printf("Enter the elements of the array:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Call the insertionSort function to sort the array
+    insertionSort(arr, n);
+
+    // Print the sorted array
+    printf("Sorted array: \n");
+    printArray(arr, n);
+
+    return 0;
+}
