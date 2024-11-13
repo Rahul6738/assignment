@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+// Define a structure to represent a student
+struct Student {
+    char name[50];
+    int age;
+    int roll_number;
+    float marks;
+};
+
+int main() {
+    // Declare a structure variable to store student information
+    struct Student student;
+
+    // Input student information
+    printf("Enter student name: ");
+    fgets(student.name, sizeof(student.name), stdin); // To read a full name with spaces
+
+    printf("Enter age: ");
+    scanf("%d", &student.age);
+
+    printf("Enter roll number: ");
+    scanf("%d", &student.roll_number);
+
+    printf("Enter marks: ");
+    scanf("%f", &student.marks);
+
+    // Display the student information
+    printf("\nStudent Information:\n");
+    printf("Name: %s", student.name);  // No need for newline since fgets includes it
+    printf("Age: %d\n", student.age);
+    printf("Roll Number: %d\n", student.roll_number);
+    printf("Marks: %.2f\n", student.marks);
+
+    return 0;
+}
