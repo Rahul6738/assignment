@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>  // For the sleep function
+
+// Function to simulate the traffic light sequence
+void trafficLightCycle() {
+    while (1) {
+        // Red Light
+        printf("RED LIGHT - STOP\n");
+        sleep(5);  // Red light stays on for 5 seconds
+
+        // Yellow Light
+        printf("YELLOW LIGHT - GET READY\n");
+        sleep(2);  // Yellow light stays on for 2 seconds
+
+        // Green Light
+        printf("GREEN LIGHT - GO\n");
+        sleep(5);  // Green light stays on for 5 seconds
+    }
+}
+
+int main() {
+    printf("Traffic Light Simulation\n");
+
+    // Start the traffic light cycle
+    trafficLightCycle();
+
+    return 0;
+}
