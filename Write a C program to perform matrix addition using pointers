@@ -1,0 +1,49 @@
+#include <stdio.h>
+
+#define MAX 3  // Define the size of the matrix (3x3 for simplicity)
+
+// Function to perform matrix addition using pointers
+void addMatrices(int *A, int *B, int *result, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            *(result + i * cols + j) = *(A + i * cols + j) + *(B + i * cols + j);  // Add corresponding elements
+        }
+    }
+}
+
+// Function to print a matrix
+void printMatrix(int *matrix, int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%d ", *(matrix + i * cols + j));
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int A[MAX][MAX], B[MAX][MAX], result[MAX][MAX];
+    
+    // Input elements for matrix A
+    printf("Enter elements of matrix A (3x3):\n");
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            printf("A[%d][%d]: ", i, j);
+            scanf("%d", &A[i][j]);
+        }
+    }
+
+    // Input elements for matrix B
+    printf("Enter elements of matrix B (3x3):\n");
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            printf("B[%d][%d]: ", i, j);
+            scanf("%d", &B[i][j]);
+        }
+    }
+
+    // Perform matrix addition
+    addMatrices((int *)A, (int *)B, (int *)result, MAX, MAX);
+
+    // Output the matrices and their sum
+    print
