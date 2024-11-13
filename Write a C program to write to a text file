@@ -1,0 +1,34 @@
+#include <stdio.h>
+
+int main() {
+    // Declare a file pointer
+    FILE *file;
+
+    // Open the file in write mode ("w")
+    // This will create a new file if it does not exist, or truncate an existing file to zero length
+    file = fopen("output.txt", "w");
+
+    // Check if the file was successfully opened
+    if (file == NULL) {
+        printf("Error: Could not open the file for writing.\n");
+        return 1;  // Exit the program if the file cannot be opened
+    }
+
+    // Writing to the file using fprintf
+    fprintf(file, "Hello, this is a test file.\n");
+    fprintf(file, "Writing text to a file in C is easy.\n");
+    
+    // Writing to the file using fputs
+    fputs("This is written using fputs().\n", file);
+
+    // Writing multiple lines to the file
+    fputs("This is the fourth line.\n", file);
+    fputs("Finally, we are done writing!\n", file);
+
+    // Close the file after writing
+    fclose(file);
+
+    printf("Text written to file successfully.\n");
+
+    return 0;
+}
