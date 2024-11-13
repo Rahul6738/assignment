@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+// Define a union
+union MyUnion {
+    int i;        // 4 bytes (on most systems)
+    double d;     // 8 bytes (on most systems)
+    char c;       // 1 byte
+};
+
+int main() {
+    // Print the size of the union
+    printf("Size of the union: %lu bytes\n", sizeof(union MyUnion));
+
+    // You can also print the size of individual members
+    printf("Size of 'i' (int): %lu bytes\n", sizeof(((union MyUnion *)0)->i));
+    printf("Size of 'd' (double): %lu bytes\n", sizeof(((union MyUnion *)0)->d));
+    printf("Size of 'c' (char): %lu bytes\n", sizeof(((union MyUnion *)0)->c));
+
+    return 0;
+}
